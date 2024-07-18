@@ -1,13 +1,5 @@
 import Link from "next/link";
-
-// Hàm để định dạng số với dấu phân cách ngàn
-const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-        minimumFractionDigits: 0, // Số chữ số sau dấu thập phân
-    }).format(price);
-};
+import { formatPrice } from "./Price";
 
 const BookCategoryComponent = ({ books, category }) => {
     return (
@@ -32,16 +24,9 @@ const BookCategoryComponent = ({ books, category }) => {
                                 <h5 className="card-title">{book.name}</h5>
                                 <p className="card-text">{book.description}</p>
                                 <p className="card-price">
-                                    {book.sale > 0 ? (
-                                        <>
-                                            <span className="text-decoration-line-through">
-                                                {formatPrice(book.price)}
-                                            </span>
-                                            {formatPrice(book.price - (book.price * book.sale / 100))}
-                                        </>
-                                    ) : (
-                                        formatPrice(book.price)
-                                    )}
+
+                                    {formatPrice(book.price - (book.price * book.sale / 100))}
+
                                 </p>
                             </div>
                         </div>

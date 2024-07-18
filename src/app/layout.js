@@ -11,7 +11,7 @@ import FooterComponent from "./components/footer";
 import "./css/style.css";
 import "./css/responsive.css";
 import "./css/bootstrap.css";
-
+import Providers from "../../redux/provider";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,24 +23,25 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="vi">
-      <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>{metadata.title}</title>
+    <Providers>
+      <html lang="vi">
+        <Head>
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+          <title>{metadata.title}</title>
 
-        <link rel="icon" href="logo." type="image/gif" />
-      </Head>
-      <body className={inter.className}>
-        <NavbarComponent />
-        {children}
-        <FooterComponent />
-        <script src="./js/jquery-3.4.1.min.js"></script>
-        <script src="./js/bootstrap.js"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `function loadGoogleMaps() {
+          <link rel="icon" href="logo." type="image/gif" />
+        </Head>
+        <body className={inter.className}>
+          <NavbarComponent />
+          {children}
+          <FooterComponent />
+          <script src="./js/jquery-3.4.1.min.js"></script>
+          <script src="./js/bootstrap.js"></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `function loadGoogleMaps() {
             if (typeof google !== 'undefined') {
               myMap();
             } else {
@@ -50,10 +51,11 @@ export default function RootLayout({ children }) {
             }
           }
           loadGoogleMaps();`,
-          }}
-        />
-        <script src="./js/map.js"></script>
-      </body>
-    </html>
+            }}
+          />
+          <script src="./js/map.js"></script>
+        </body>
+      </html>
+    </Providers>
   );
 }
