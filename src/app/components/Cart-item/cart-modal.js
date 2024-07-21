@@ -17,7 +17,7 @@ export default function CartModal({ show, handleClose }) {
     const cart = useSelector((state) => state.cart.items);
     const total = useSelector((state) => state.cart.totalPrice);
     const [checkoutError, setCheckoutError] = useState(null);
-
+    const user = useSelector((state) => state.auth.user);
     const handleRemove = (id) => {
         console.log(`Removing item with id: ${id}`); // Log removal
         dispatch(removeFromCart(id));
