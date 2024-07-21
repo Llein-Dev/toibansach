@@ -1,5 +1,5 @@
 import React from 'react';
-import GoogleMap from './googlemap';
+import GoogleMap from '../Footer/googlemap';
 
 const InfoComponent = () => {
     return (

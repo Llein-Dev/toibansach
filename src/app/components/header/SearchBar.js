@@ -1,7 +1,7 @@
 
 export default function SearchComponent() {
     return (
-        <div className="search-container ml-auto">
+        <div className="search-container">
             <form action="/search" method="get" className="search-form d-flex">
                 <input
                     type="text"

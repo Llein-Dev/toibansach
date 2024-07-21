@@ -1,7 +1,7 @@
 
-import ContactComponent from "./components/contact";
-import CustomerComponent from "./components/customer";
-import SliderComponent from "./components/slider";
+import ContactComponent from "./components/Section/contact";
+import CustomerComponent from "./components/Section/customer";
+import SliderComponent from "./components/header/slider";
 
 
 export default function Home() {

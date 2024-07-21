@@ -1,6 +1,6 @@
-import BookComponent from "../components/Book";
-import ContactComponent from "../components/contact";
-import NoResults from "../components/Noresults";
+import BookComponent from "../components/Book-item/Book";
+import ContactComponent from "../components/Section/contact";
+import NoResults from "../components/header/Noresults";
 
 export default async function SearchPage({ searchParams }) {
     const keyword = searchParams.keyword || '';
@@ -40,7 +40,6 @@ export default async function SearchPage({ searchParams }) {
         return (
             <div className="search-page container ">
                 <div className="error-message">
-
                     <h3>Không tìm thấy kết quả!</h3>
                     <p>Vui lòng thử lại sau hoặc liên hệ với chúng tôi nếu vấn đề vẫn tiếp tục.</p>
                     <img src="images/slider-img.png" width="50%" />

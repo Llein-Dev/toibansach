@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
-import CategoryComponent from "../components/category";
-import Filter from "../components/filter";
+import CategoryComponent from '../components/Category-item/category';
+import Filter from '../components/Category-item/filter';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -61,7 +61,7 @@ const Categories = () => {
         setFilteredCategories(categories);
     };
 
-    if (loading) return <p>Đang tải danh mục sách...</p>;
+    if (loading) return <div className='page'>Đang tải danh mục sách...</div>;
     if (fetchError) return <p>Lỗi khi tải danh mục sách: {fetchError}</p>;
 
     return (

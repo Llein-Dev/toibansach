@@ -1,8 +1,7 @@
 "use client"; // Thêm dòng này để đánh dấu component này là Client Component
 
 import React, { useEffect } from 'react';
-import Info from './Info';
-
+import InfoComponent from '../Section/Info';
 const FooterComponent = () => {
     useEffect(() => {
         const yearElement = document.getElementById('displayYear');
@@ -13,7 +12,7 @@ const FooterComponent = () => {
 
     return (
         <>
-            <Info />
+            <InfoComponent />
             <footer className="footer_section">
                 <div className="container">
                     <p>

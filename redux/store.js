@@ -1,15 +1,12 @@
 // src/app/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import { createWrapper } from 'next-redux-wrapper';
-import authReducer from '../features/auth/authSlice';
-import cartReducer from '../features/cart/cartSlice';
+import authSlice from './slices/authSlice';
+import cartSlice from './slices/cartSlice';
 
-const makeStore = () =>
-    configureStore({
-        reducer: {
-            auth: authReducer,
-            cart: cartReducer,
-        },
-    });
-
-export const wrapper = createWrapper(makeStore);
+// Create a single Redux store instance
+export const store = configureStore({
+    reducer: {
+        auth: authSlice.reducer,
+        cart: cartSlice.reducer,
+    },
+});

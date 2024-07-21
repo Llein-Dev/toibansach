@@ -1,13 +1,25 @@
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 const BookComponent = ({ books }) => {
+    const variants = {
+        hidden: { opacity: 0, scale: 0.9 },
+        visible: { opacity: 1, scale: 1 },
+    };
+
     return (
         <>
             {books.map((book) => {
                 const discountedPrice = book.price - (book.price * book.sale / 100);
                 return (
                     <Link href={`/books/${book._id}`} legacyBehavior key={book._id}>
-                        <div className="col-md-3 py-3 px-2 custom-book">
+                        <motion.div
+                            className="col-md-3 py-3 px-2 custom-book"
+                            initial="hidden"
+                            animate="visible"
+                            variants={variants}
+                            transition={{ duration: 0.3 }}
+                        >
                             <div className="card">
                                 <div className="gradient-overlay"></div>
                                 <div className="sale-tag">
@@ -26,7 +38,7 @@ const BookComponent = ({ books }) => {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </Link>
                 );
             })}

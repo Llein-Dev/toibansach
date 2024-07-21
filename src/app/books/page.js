@@ -1,24 +1,24 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
-import BookComponent from "../components/Book";
-import BookMiniComponent from "../components/Books-2";
+import BookComponent from "../components/Book-item/Book";
+import BookMiniComponent from "../components/Book-item/Books-2";
 
 const Books = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
+    const [sortOption, setSortOption] = useState("priceAsc");
 
     const fetchBooks = async () => {
         try {
-            await new Promise(resolve => setTimeout(resolve, 200)); // Delay for 200ms
             const res = await fetch('http://localhost:3001/products');
             if (!res.ok) {
                 throw new Error('Failed to fetch products');
             }
             const data = await res.json();
             setProducts(data);
-            setFilteredProducts(data); // Update filtered list with fetched data
+            setFilteredProducts(data);
         } catch (error) {
             console.error('Error fetching products:', error.message);
             setFetchError(error.message);
@@ -32,12 +32,26 @@ const Books = () => {
         fetchBooks();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
-    if (fetchError) return <div>Error: {fetchError}</div>;
+    useEffect(() => {
+        const sortProducts = () => {
+            let sortedProducts;
+            switch (sortOption) {
+                case "priceAsc":
+                    sortedProducts = [...products].sort((a, b) => (a.price * (1 - a.sale / 100)) - (b.price * (1 - b.sale / 100)));
+                    break;
+                case "priceDesc":
+                    sortedProducts = [...products].sort((a, b) => (b.price * (1 - b.sale / 100)) - (a.price * (1 - a.sale / 100)));
+                    break;
+                default:
+                    sortedProducts = products;
+            }
+            setFilteredProducts(sortedProducts);
+        };
+        sortProducts();
+    }, [sortOption, products]);
 
-    const sortedByPrice = [...products]
-        .sort((a, b) => b.sale - a.sale)
-        .slice(0, 4);
+    if (loading) return <div className="page">Loading...</div>;
+    if (fetchError) return <div className="error">Error: {fetchError}</div>;
 
     const hotBooks = [...products]
         .sort((a, b) => b.view - a.view)
@@ -47,36 +61,33 @@ const Books = () => {
         <div className="hero_area">
             <section className="books_section mb-5">
                 <div className="container">
-                    {/* <div className="heading_container heading_center">
-                        <h2>Our Books</h2>
-                        <p>Explore our collection of books available at TOIBANSACH Bookstore.</p>
-                    </div> */}
-
-                    {/* Sản phẩm hot */}
-                    <div className="py-5" >
-                        <h3 className="my-4 title-product">Hot Books</h3>
+                    <div className="py-5">
+                        <div className="heading_container my-4 heading_center">
+                            <h2>Hot Books</h2>
+                        </div>
                         <div className="row">
                             <BookMiniComponent books={hotBooks} />
                         </div>
                     </div>
-
-                    {/* Sản phẩm theo giá từ thấp tới cao */}
                     <div className="py-5">
-                        <h3 className="my-4 title-product">Good Price</h3>
-                        <div className="row">
-                            <BookMiniComponent books={sortedByPrice} />
+                        <div className="heading_container my-4 heading_center">
+                            <h2>Library</h2>
                         </div>
-                    </div>
-
-                    {/* Sản phẩm theo chủ đề */}
-                    <div className="py-5">
-                        <h3 className="my-4 title-product">Books</h3>
-
-                        <div className="row">
-                            <BookComponent books={products} />
+                        <div className="mb-4">
+                            <label htmlFor="sortOptions" className="form-label">Sort by:</label>
+                            <select
+                                id="sortOptions"
+                                className="form-select"
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                            >
+                                <option value="priceAsc">Low to High</option>
+                                <option value="priceDesc">High to Low</option>
+                            </select>
                         </div>
-
-
+                        <div className="row">
+                            <BookComponent books={filteredProducts} />
+                        </div>
                     </div>
                 </div>
             </section>

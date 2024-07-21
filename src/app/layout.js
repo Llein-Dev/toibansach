@@ -1,25 +1,16 @@
-// src/app/layout.js
+"use client";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import NavbarComponent from "./components/Navbar";
-import FooterComponent from "./components/footer";
-// font-awesome
-// // import { config } from '@fortawesome/fontawesome-svg-core'
-// import '@fortawesome/fontawesome-svg-core/styles.css'
-// config.autoAddCss = false
-// import "./globals.css";
+import NavbarComponent from "./components/header/Navbar";
+import FooterComponent from "./components/Footer/footer";
 import "./css/style.css";
 import "./css/responsive.css";
 import "./css/bootstrap.css";
 import Providers from "../../redux/provider";
-
+import Script from "next/script";
+import { metadata } from "./meta";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Tôi Bán Sách",
-  description: "Bán Sách Tôi",
-};
 
 export default function RootLayout({ children }) {
   return (
@@ -30,30 +21,34 @@ export default function RootLayout({ children }) {
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <title>{metadata.title}</title>
-
-          <link rel="icon" href="logo." type="image/gif" />
+          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" />
+          <link rel="icon" href="./logo.svg" type="image/gif" />
         </Head>
         <body className={inter.className}>
           <NavbarComponent />
-          {children}
+          <main>
+            {children}
+          </main>
           <FooterComponent />
-          <script src="./js/jquery-3.4.1.min.js"></script>
-          <script src="./js/bootstrap.js"></script>
-          <script
+          <Script src="/js/jquery-3.4.1.min.js" strategy="beforeInteractive" />
+          <Script src="/js/bootstrap.js" strategy="beforeInteractive" />
+          <Script
+            id="google-maps-script"
+            strategy="lazyOnload"
             dangerouslySetInnerHTML={{
               __html: `function loadGoogleMaps() {
-            if (typeof google !== 'undefined') {
-              myMap();
-            } else {
-              var script = document.createElement('script');
-              script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap';
-              document.head.appendChild(script);
-            }
-          }
-          loadGoogleMaps();`,
+                if (typeof google !== 'undefined') {
+                  myMap();
+                } else {
+                  var script = document.createElement('script');
+                  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap';
+                  document.head.appendChild(script);
+                }
+              }
+              loadGoogleMaps();`,
             }}
           />
-          <script src="./js/map.js"></script>
+          <Script src="./js/map.js" strategy="lazyOnload" />
         </body>
       </html>
     </Providers>

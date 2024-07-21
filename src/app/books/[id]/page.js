@@ -1,9 +1,14 @@
 "use client"
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
-import { addToCart } from '../../../../redux/slices/CartSlice';
+import { addToCart } from '../../../../redux/slices/cartSlice';
 import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import BookMiniComponent from '@/app/components/Book-item/Books-2';
+import axios from 'axios';
 
+const API = "http://localhost:3001/";
 // Fetcher function for SWR
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -20,11 +25,30 @@ const DetailPage = ({ params }) => {
     const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
     const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-
-    const { data: product, error } = useSWR(`http://localhost:3001/products/product/${id}`, fetcher);
+    const cart = useSelector((state) => state.cart);
+    const { data: product, error } = useSWR(`${API}products/product/${id}`, fetcher);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
+
+
+    const handleAddToCart = async () => {
+        dispatch(addToCart({ item: product, quantity }));
+
+        try {
+            const response = await axios.post(`${API}carts/api/cart`, { // Đảm bảo URL chính xác
+                items: cart.items,
+                totalQuantity: cart.totalQuantity,
+                totalPrice: cart.totalPrice
+            });
+            console.log('Cart submitted successfully');
+            console.log('Added Product:', product); // Hiển thị thông tin sản phẩm vừa thêm
+            console.log('Total Quantity:', cart.totalQuantity); // Hiển thị số lượng sản phẩm
+        } catch (error) {
+            console.error('Failed to submit cart:', error);
+        }
+    };
+
 
     useEffect(() => {
         const fetchRelatedProducts = async () => {
@@ -76,7 +100,7 @@ const DetailPage = ({ params }) => {
                                 {typeof discountedPrice === 'number' ? formatPrice(discountedPrice) : 'N/A'}
                             </span>
                         </div>
-                        <p className="lead description-limited">{product.description}</p>
+                        <p className="description-limited">{product.description}</p>
                         <div className="d-flex align-items-center">
                             <input
                                 className="form-control text-center me-3 quantity-input"
@@ -86,15 +110,11 @@ const DetailPage = ({ params }) => {
                                 onChange={(e) => setQuantity(Number(e.target.value))}
                             />
                             <button
-                                className="btn btn-primary my-2"
-                                onClick={() => dispatch(addToCart({ item: product, quantity }))}
+                                className="btn btn-custom my-2"
+                                onClick={() => handleAddToCart()}
                             >
-                                <i className="bi-cart-fill me-1"></i>
-                                Add to cart
+                                <FontAwesomeIcon icon={faCartPlus} />
                             </button>
-                        </div>
-                        <div className="mt-3">
-                            <strong>Số lượng sản phẩm đã thêm vào giỏ hàng: {totalQuantity}</strong>
                         </div>
                     </div>
                 </div>
@@ -137,41 +157,17 @@ const DetailPage = ({ params }) => {
                                     <p>Loading...</p>
                                     <div className="spinner"></div>
                                 </div>
+                            ) : filteredProducts.length > 0 ? (
+                                <BookMiniComponent books={filteredProducts} />
                             ) : (
-                                filteredProducts.length > 0 ? filteredProducts.map((relatedProduct) => {
-                                    let relatedDiscountedPrice = 'N/A';
-                                    if (typeof relatedProduct.price === 'number' && typeof relatedProduct.sale === 'number') {
-                                        relatedDiscountedPrice = relatedProduct.price - (relatedProduct.price * relatedProduct.sale / 100);
-                                    }
-
-                                    return (
-                                        <div key={relatedProduct._id} className="col-md-6 mb-4">
-                                            <div className="d-flex align-items-center border rounded p-3 shadow-sm">
-                                                <div className="me-3">
-                                                    <img
-                                                        src={`http://localhost:3001/img/Books-image/${relatedProduct.image}`}
-                                                        className="related-product-image"
-                                                        alt={relatedProduct.name}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <h5 className="related-product-title">{relatedProduct.name}</h5>
-                                                    <p className="related-product-price">
-                                                        {formatPrice(relatedDiscountedPrice)}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                }) : (
-                                    <div className="no-products">
-                                        <strong>Không có sản phẩm liên quan nào.</strong>
-                                    </div>
-                                )
+                                <div className="no-products">
+                                    <strong>Không có sản phẩm liên quan nào.</strong>
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
     );

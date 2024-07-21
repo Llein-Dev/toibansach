@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatPrice } from "./Price";
+import { formatPrice } from "../Price";
 
 const BookCategoryComponent = ({ books, category }) => {
     return (
