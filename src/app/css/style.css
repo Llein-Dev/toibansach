@@ -1,10 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap");
-
 body {
-  font-family: 'Mulish', sans-serif;
-  color: #0c0c0c;
-  background-color: #ffffff;
-  overflow-x: hidden;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif;
 }
 
 .layout_padding {
@@ -1333,12 +1344,6 @@ small,
   /* Màu nền tối hơn khi hover */
 }
 
-
-
-body {
-  background-color: #f8f9fa;
-  font-family: 'Arial', sans-serif;
-}
 
 .cart-container,
 .bill-container {

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, login } from '../../../redux/slices/authSlice';
+import { logout } from '../../../redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,34 +8,35 @@ import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Profile = () => {
     const [showMenu, setShowMenu] = useState(false);
-    const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
     const router = useRouter();
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const user = parseJwt(token);
-            dispatch(login({ user, token }));
-        }
-    }, [dispatch]);
+    const userFromRedux = useSelector((state) => state.auth.user);
+    const [user, setUser] = useState(userFromRedux);
 
-    const parseJwt = (token) => {
-        try {
-            return JSON.parse(atob(token.split('.')[1]));
-        } catch (e) {
-            return null;
-        }
+    const getUserFromLocalStorage = () => {
+        const userPayload = localStorage.getItem('userPayload');
+        return userPayload ? JSON.parse(userPayload) : null;
     };
 
+    useEffect(() => {
+        if (!userFromRedux) {
+            const userFromStorage = getUserFromLocalStorage();
+            setUser(userFromStorage);
+        } else {
+            setUser(userFromRedux);
+        }
+    }, [userFromRedux]);
 
     const toggleMenu = () => {
-        setShowMenu(!showMenu);
+        setShowMenu((prev) => !prev);
     };
 
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem('token');
+        localStorage.removeItem('userPayload');
+        setUser(null);
         router.push('/login');
     };
 
@@ -56,6 +57,11 @@ const Profile = () => {
             </button>
             {showMenu && (
                 <div className="dropdown-menu-2">
+                    <Link href="/profile" legacyBehavior>
+                        <button className="btn btn-light" onClick={toggleMenu}>
+                            <FontAwesomeIcon icon={faUser} /> Manage Profile
+                        </button>
+                    </Link>
                     <Link href="/cart" legacyBehavior>
                         <button className="btn btn-light" onClick={toggleMenu}>
                             <FontAwesomeIcon icon={faShoppingCart} /> Cart

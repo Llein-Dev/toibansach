@@ -6,32 +6,28 @@ import BillDetails from '../components/Cart-item/bill';
 import NoProducts from '../components/Book-item/no-product';
 import { removeFromCart, updateQuantity, clearCart } from '../../../redux/slices/cartSlice'; // Added clearCart
 import { formatPrice } from '../components/Price';
-import axios from 'axios'; // Axios for API requests
+
 
 const CheckOut = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart.items);
     const [isSubmitting, setIsSubmitting] = useState(false); // Submission state
-
-    // Calculate the total price without discount
     const originalTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-    // Calculate the total price with discounts applied
     const discountedTotal = cart.reduce((sum, item) => {
-        // Ensure sale is a valid number, default to 0 if not
         const salePercentage = item.sale ? parseFloat(item.sale) : 0;
         const discountedPrice = item.price * (1 - salePercentage / 100);
         return sum + discountedPrice * item.quantity;
     }, 0);
-
-    // Calculate the discount amount
+    const handleRemove = (id) => {
+        console.log(`Removing item with id: ${id}`); // Log removal
+        dispatch(removeFromCart(id));
+    };
     const discount = originalTotal - discountedTotal;
 
-    // Prepare bill items
     const billItems = [
-        { label: 'Sản phẩm', value: `${formatPrice(originalTotal)} VND` },
-        { label: 'Giảm giá', value: `-${formatPrice(discount)} VND` },
-        { label: 'Tổng cộng', value: `${formatPrice(discountedTotal)} VND` }
+        { label: 'Sản phẩm', value: `${formatPrice(originalTotal)} ` },
+        { label: 'Giảm giá', value: `-${formatPrice(discount)} ` },
+        { label: 'Tổng cộng', value: `${formatPrice(discountedTotal)} ` }
     ];
 
     return (
@@ -48,10 +44,13 @@ const CheckOut = () => {
                         ) : (
                             cart.map((item) => (
                                 <CartItem
-                                    key={item.id}
+                                    key={item._id}
                                     item={item}
-                                    onRemove={() => dispatch(removeFromCart(item.id))}
-                                    onQuantityChange={(quantity) => dispatch(updateQuantity({ id: item.id, quantity }))}
+                                    onRemove={() => handleRemove(item._id)}
+                                    onQuantityChange={(quantity) => {
+                                        console.log(`Updating quantity for item ${item._id} to ${quantity}`); // Log quantity update
+                                        dispatch(updateQuantity({ id: item._id, quantity }));
+                                    }}
                                 />
                             ))
                         )}

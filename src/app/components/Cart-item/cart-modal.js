@@ -31,7 +31,7 @@ export default function CartModal({ show, handleClose }) {
             console.log('Response from server:', response.data); // Kiểm tra phản hồi từ server
 
             if (response.data.message === 'Cart submitted successfully') {
-                dispatch(clearCart());
+                // dispatch(clearCart());
                 router.push('/cart');
             } else {
                 throw new Error('Checkout failed');
@@ -62,9 +62,9 @@ export default function CartModal({ show, handleClose }) {
                 ) : (
                     cart.map((item) => (
                         <CartItem
-                            key={item._id} // Đảm bảo item._id là duy nhất
+                            key={item._id} 
                             item={item}
-                            onRemove={() => handleRemove(item._id)} // Truyền đúng id
+                            onRemove={() => handleRemove(item._id)} 
                             onQuantityChange={(quantity) => {
                                 console.log(`Updating quantity for item ${item._id} to ${quantity}`); // Log quantity update
                                 dispatch(updateQuantity({ id: item._id, quantity }));

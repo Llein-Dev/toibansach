@@ -1,0 +1,68 @@
+
+.profile-management-container>.row>div {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px;
+    padding: 24px;
+}
+
+.profile-management-container h1,
+.profile-management-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-management-container .profile-form,
+.profile-management-container .password-form {
+    margin-bottom: 2rem;
+}
+
+.profile-management-container .form-group {
+    margin-bottom: 1rem;
+}
+
+.profile-management-container .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.profile-management-container .form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.profile-management-container .btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #302529;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-management-container .btn:hover {
+    background-color: #302529;
+}
+
+.profile-management-container .nav-pills .nav-link {
+    background-color: #f8f9fa;
+    color: #302529;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    width: 100%;
+}
+
+.profile-management-container .nav-pills .nav-link.active {
+    background-color: #302529;
+    color: #fff;
+}

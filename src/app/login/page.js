@@ -9,32 +9,43 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+    
         if (!email || !password) {
             setError('Please enter both email and password.');
             return;
         }
-
+    
+        setLoading(true);
         try {
             const response = await axios.post(`${apiUrl}/users/login`, { email, password });
+    
             if (response.status === 200) {
-                localStorage.setItem('token', response.data.token);
-                dispatch(login({ user: response.data.user, token: response.data.token }));
+                const { token, user } = response.data;
+    
+                // Lưu token và userPayload vào localStorage
+                localStorage.setItem('token', token);
+                localStorage.setItem('userPayload', JSON.stringify(user));
+    
+                // Cập nhật Redux state
+                dispatch(login({ user, token }));
                 router.push('/');
             }
         } catch (error) {
             console.error('Login error:', error.response ? error.response.data : error.message);
             const message = error.response?.data?.message || 'Login failed, please try again.';
             setError(message);
+        } finally {
+            setLoading(false);
         }
     };
-
+    
 
     const signup = () => {
         router.push('/signup');
@@ -59,7 +70,6 @@ const LoginPage = () => {
 
                             {error && <p className="text-danger">{error}</p>}
 
-                            {/* Email input */}
                             <div className="form-outline my-5">
                                 <input
                                     type="email"
@@ -69,14 +79,8 @@ const LoginPage = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <div className="form-notch">
-                                    <div className="form-notch-leading" style={{ width: '9px' }}></div>
-                                    <div className="form-notch-middle" style={{ width: '88.8px' }}></div>
-                                    <div className="form-notch-trailing"></div>
-                                </div>
                             </div>
 
-                            {/* Password input */}
                             <div className="form-outline mb-5">
                                 <input
                                     type="password"
@@ -89,7 +93,6 @@ const LoginPage = () => {
                             </div>
 
                             <div className="d-flex justify-content-between align-items-center">
-                                {/* Checkbox */}
                                 <div className="form-check mb-0">
                                     <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
                                     <label className="form-check-label" htmlFor="form2Example3"> Remember me </label>
@@ -99,7 +102,9 @@ const LoginPage = () => {
 
                             <div className="text-center text-lg-start mt-4 pt-2">
                                 <button type="button" onClick={signup} className="btn btn-light" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}>Signup</button>
-                                <button type="submit" className="btn btn-custom-2" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}>Login</button>
+                                <button type="submit" className="btn btn-custom-2" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}>
+                                    {loading ? 'Loading...' : 'Login'}
+                                </button>
                             </div>
                         </form>
                     </div>

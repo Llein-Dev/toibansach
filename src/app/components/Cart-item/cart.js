@@ -3,17 +3,15 @@ import { useDispatch } from 'react-redux';
 import { updateQuantity } from '../../../../redux/slices/cartSlice';
 
 function CartItem({ item, onRemove }) {
-    const dispatch = useDispatch(); // Initialize dispatch
+    const dispatch = useDispatch();
 
-    // Event handler for quantity change
     const handleQuantityChange = (e) => {
         const newQuantity = parseInt(e.target.value, 10);
-        dispatch(updateQuantity({ id: item.id, quantity: newQuantity }));
+        dispatch(updateQuantity({ id: item._id, quantity: newQuantity }));
     };
 
-    // Event handler for removing the item
     const handleRemove = () => {
-        onRemove(item.id);
+        onRemove(item._id);
     };
 
     return (
