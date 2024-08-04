@@ -1,8 +1,20 @@
+import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function SearchComponent() {
+    const router = useRouter();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const keyword = event.target.keyword.value;
+        if (keyword) {
+            router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
+        }
+    };
+
     return (
         <div className="search-container">
-            <form action="/search" method="get" className="search-form d-flex">
+            <form onSubmit={handleSubmit} className="search-form d-flex">
                 <input
                     type="text"
                     name="keyword"

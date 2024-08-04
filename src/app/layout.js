@@ -8,6 +8,7 @@ import { metadata } from "./meta";
 import "./css/style.css";
 import "./css/responsive.css";
 import "./css/bootstrap.css";
+import { SearchProvider } from "./components/text/searchcontext";
 
 export default function RootLayout({ children }) {
   return (
@@ -26,7 +27,13 @@ export default function RootLayout({ children }) {
         </Head>
         <body>
           <NavbarComponent />
-          <main>{children}</main>
+
+          <main>
+            <SearchProvider>
+              {children}
+            </SearchProvider>
+          </main>
+
           <FooterComponent />
           <Script src="/js/jquery-3.4.1.min.js" strategy="beforeInteractive" />
           <Script src="/js/bootstrap.js" strategy="beforeInteractive" />

@@ -1,7 +1,8 @@
 "use client"
 
+import BookComponent from '@/app/components/Book-item/Book';
 import { useEffect, useState } from 'react';
-import BookComponent from '@/app/components/Book';
+
 
 async function fetchCategories(categoryId) {
     const res = await fetch(`http://localhost:3001/categories/category/${categoryId}`);
