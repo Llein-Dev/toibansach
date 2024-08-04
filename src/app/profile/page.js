@@ -1,3 +1,4 @@
+// profile-management.js
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -54,7 +55,7 @@ const ProfileManagement = () => {
 
     return (
         <div className="container profile-management-container layout_padding">
-            <div class="heading_container heading_center"><h2>User Manager</h2></div>
+            <div className="heading_container heading_center"><h2>User Manager</h2></div>
             <div className="row">
                 <div className="col-md-3">
                     <ul className="nav nav-pills flex-column">
@@ -69,7 +70,6 @@ const ProfileManagement = () => {
                 <div className="col-md-9">
                     {activeTab === 'editProfile' && (
                         <div className="profile-form">
-
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label>Full Name</label>
@@ -98,7 +98,6 @@ const ProfileManagement = () => {
                     )}
                     {activeTab === 'changePassword' && (
                         <div className="password-form">
-
                             <form onSubmit={handlePasswordSubmit}>
                                 <div className="form-group">
                                     <label>Current Password</label>

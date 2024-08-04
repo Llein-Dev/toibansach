@@ -1,7 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, Button } from "react-bootstrap";
-import { useRouter } from "next/router"; // Kiểm tra phiên bản Next.js của bạn
+import { useRouter } from "next/navigation"; // Kiểm tra phiên bản Next.js của bạn
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import CartItem from "./cart";
