@@ -26,11 +26,9 @@ const NavbarComponent = () => {
             <header className="header_section">
                 <div className="container-fluid">
                     <nav className="navbar navbar-expand-lg custom_nav-container">
-                        <Link href="/" legacyBehavior>
-                            <a className="navbar-brand">
-                                <Image src="/images/logo.png" width={50} height={50} alt="Logo" className="navbar-logo" />
-                                <span>TOIBANSACH</span>
-                            </a>
+                        <Link href="/" className="navbar-brand">
+                            <Image src="/images/logo.png" width={50} height={50} alt="Logo" className="navbar-logo" />
+                            <span>TOIBANSACH</span>
                         </Link>
                         <button
                             className="navbar-toggler"
@@ -47,8 +45,8 @@ const NavbarComponent = () => {
                             <ul className="navbar-nav">
                                 {navigate.map((nav) => (
                                     <li className="nav-item" key={nav.href}>
-                                        <Link href={nav.href} legacyBehavior>
-                                            <a className="nav-link">{nav.name}</a>
+                                        <Link href={nav.href} className="nav-link">
+                                            {nav.name}
                                         </Link>
                                     </li>
                                 ))}
@@ -62,7 +60,7 @@ const NavbarComponent = () => {
                             >
                                 <FontAwesomeIcon icon={faShoppingCart} />
                             </button>
-                            <Profile/>
+                            <Profile />
                         </div>
                     </nav>
                 </div>

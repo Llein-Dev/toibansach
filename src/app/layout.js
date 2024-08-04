@@ -35,8 +35,9 @@ export default function RootLayout({ children }) {
           </main>
 
           <FooterComponent />
-          <Script src="/js/jquery-3.4.1.min.js" strategy="beforeInteractive" />
-          <Script src="/js/bootstrap.js" strategy="beforeInteractive" />
+          {/* Sử dụng Script với strategy="lazyOnload" cho các script bên ngoài */}
+          <Script src="/js/jquery-3.4.1.min.js" strategy="lazyOnload" />
+          <Script src="/js/bootstrap.js" strategy="lazyOnload" />
           <Script
             id="google-maps-script"
             strategy="lazyOnload"
