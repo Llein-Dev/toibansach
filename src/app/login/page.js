@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { login } from '../../../redux/slices/authSlice';
+import { login } from '../redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {

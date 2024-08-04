@@ -2,12 +2,12 @@
 import Head from "next/head";
 import NavbarComponent from "./components/header/Navbar";
 import FooterComponent from "./components/Footer/footer";
-import Providers from "../../redux/provider";
+import Providers from "./redux/provider";
 import Script from "next/script";
 import { metadata } from "./meta";
 import "./css/style.css";
 import "./css/responsive.css";
-import "./css/bootstrap.css";
+import  "bootstrap/dist/css/bootstrap.min.css"
 import { SearchProvider } from "./components/text/searchcontext";
 
 export default function RootLayout({ children }) {

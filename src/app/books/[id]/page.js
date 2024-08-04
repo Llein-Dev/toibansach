@@ -1,7 +1,7 @@
 "use client"
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
-import { addToCart } from '../../../../redux/slices/cartSlice';
+import { addToCart } from '@/app/redux/slices/cartSlice';
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';

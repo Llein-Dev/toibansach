@@ -1,11 +1,10 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, Button } from "react-bootstrap";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router"; // Kiểm tra phiên bản Next.js của bạn
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import CartItem from "./cart";
-import { removeFromCart, updateQuantity, clearCart } from '../../../../redux/slices/cartSlice';
 import axios from 'axios';
 import { useState } from "react";
 
@@ -18,6 +17,7 @@ export default function CartModal({ show, handleClose }) {
     const total = useSelector((state) => state.cart.totalPrice);
     const [checkoutError, setCheckoutError] = useState(null);
     const user = useSelector((state) => state.auth.user);
+
     const handleRemove = (id) => {
         console.log(`Removing item with id: ${id}`); // Log removal
         dispatch(removeFromCart(id));
@@ -31,7 +31,7 @@ export default function CartModal({ show, handleClose }) {
             console.log('Response from server:', response.data); // Kiểm tra phản hồi từ server
 
             if (response.data.message === 'Cart submitted successfully') {
-                // dispatch(clearCart());
+                dispatch(clearCart()); // Uncomment if you want to clear cart after successful checkout
                 router.push('/cart');
             } else {
                 throw new Error('Checkout failed');

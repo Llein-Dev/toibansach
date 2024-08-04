@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../../redux/slices/authSlice';
+import { logout } from '@/app/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

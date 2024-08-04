@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUser, changePassword } from '../../../redux/slices/authSlice';
+import { updateUser, changePassword } from '../redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import '../css/profile-management.css';
 
