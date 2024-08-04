@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CartItem from '../components/Cart-item/cart';
 import BillDetails from '../components/Cart-item/bill';
 import NoProducts from '../components/Book-item/no-product';
-import { removeFromCart, updateQuantity, clearCart } from '../../../redux/slices/cartSlice'; // Added clearCart
+import { removeFromCart, updateQuantity, clearCart } from '../../../redux/slices/cartSlice';
 import { formatPrice } from '../components/Price';
 
 
