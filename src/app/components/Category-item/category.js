@@ -8,7 +8,7 @@ export default function CategoryComponent({ category }) {
             <div className="col-sm-6 col-md-4">
                 <div className="box">
                     <div className="img-box">
-                        <img   src={`http://localhost:3001/img/Categories-image/${category.image}`} alt={category.name} />
+                        <img   src={`${process.env.NEXT_PUBLIC_API_URL}/img/Categories-image/${category.image}`} alt={category.name} />
                     </div>
                     <div className="detail-box">
                         <h5>{category.name}</h5>

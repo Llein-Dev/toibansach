@@ -17,7 +17,7 @@ const Categories = () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 200)); // Chờ 1 giây
 
-                const res = await fetch(`http://localhost:3001/categories`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch categories');
                 }

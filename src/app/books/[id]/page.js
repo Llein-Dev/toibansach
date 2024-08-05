@@ -8,7 +8,7 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import BookMiniComponent from '@/app/components/Book-item/Books-2';
 import axios from 'axios';
 
-const API = "http://localhost:3001/";
+const API = process.env.NEXT_PUBLIC_API_URL;
 // Fetcher function for SWR
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -54,7 +54,7 @@ const DetailPage = ({ params }) => {
         const fetchRelatedProducts = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const res = await fetch(`http://localhost:3001/products`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
                 if (!res.ok) throw new Error('Failed to fetch related products');
                 const data = await res.json();
                 setFilteredProducts(data);
@@ -85,7 +85,7 @@ const DetailPage = ({ params }) => {
                     <div className="col-md-6">
                         <img
                             className="product-image"
-                            src={`http://localhost:3001/img/Books-image/${product.image}`}
+                            src={`${process.env.NEXT_PUBLIC_API_URL}/img/Books-image/${product.image}`}
                             height={600}
                             alt={product.name}
                         />

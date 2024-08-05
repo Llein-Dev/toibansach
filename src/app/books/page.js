@@ -12,7 +12,7 @@ const Books = () => {
 
     const fetchBooks = async () => {
         try {
-            const res = await fetch('http://localhost:3001/products');
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
             if (!res.ok) {
                 throw new Error('Failed to fetch products');
             }

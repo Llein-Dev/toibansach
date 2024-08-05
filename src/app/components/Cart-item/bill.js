@@ -11,7 +11,7 @@ const BillDetails = ({ items }) => {
         setIsSubmitting(true);
         try {
             console.log('Cart data being sent:', cart); // Log cart data
-            const response = await axios.post('http://localhost:3001/carts/checkout', { items: cart });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/carts/checkout`, { items: cart });
             if (response.status === 201) {
                 // Handle successful checkout
             }

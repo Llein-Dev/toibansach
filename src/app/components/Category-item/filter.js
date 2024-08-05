@@ -15,7 +15,7 @@ const Filter = () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000)); // Chờ 1 giây
 
-                const res = await fetch(`http://localhost:3001/categories`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch related categories');
                 }
@@ -71,7 +71,7 @@ const Filter = () => {
                         <div key={category._id} className="category-item">
                             <h3>{category.name}</h3>
                             <p>{category.description}</p>
-                            <img src={`http://localhost:3001/img/Categories-image/${category.image}`} alt={category.name} />
+                            <img src={`${process.env.NEXT_PUBLIC_API_URL}/img/Categories-image/${category.image}`} alt={category.name} />
                         </div>
                     ))
                 ) : (

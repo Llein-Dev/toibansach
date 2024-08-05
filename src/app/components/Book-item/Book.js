@@ -26,7 +26,7 @@ const BookComponent = ({ books }) => {
                                     -{book.sale}%
                                 </div>
                                 <img
-                                    src={`http://localhost:3001/img/Books-image/${book.image}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}/img/Books-image/${book.image}`}
                                     className="card-img-top"
                                     alt={book.name}
                                 />

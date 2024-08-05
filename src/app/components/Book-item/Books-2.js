@@ -20,7 +20,7 @@ const BookMiniComponent = ({ books }) => {
                                 )}
                                 <div className="me-3">
                                     <img
-                                        src={`http://localhost:3001/img/Books-image/${book.image}`}
+                                        src={`${process.env.NEXT_PUBLIC_API_URL}/img/Books-image/${book.image}`}
                                         className="related-product-image"
                                         alt={book.name}
                                     />

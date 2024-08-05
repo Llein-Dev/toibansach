@@ -17,7 +17,7 @@ function CartItem({ item, onRemove }) {
     return (
         <div className="cart-item d-flex align-items-center mb-3">
             <img
-                src={`http://localhost:3001/img/Books-image/${item.image}`}
+                src={`${process.env.NEXT_PUBLIC_API_URL}/img/Books-image/${item.image}`}
                 alt={item.name}
                 className="cart-item-image mr-3"
                 style={{ width: '100px', height: '100px', objectFit: 'cover' }}

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 
 async function fetchCategories(categoryId) {
-    const res = await fetch(`http://localhost:3001/categories/category/${categoryId}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/category/${categoryId}`);
     if (!res.ok) {
         throw new Error('Failed to fetch categories');
     }
@@ -14,7 +14,7 @@ async function fetchCategories(categoryId) {
 }
 
 async function fetchCategoryProducts(categoryId) {
-    const res = await fetch(`http://localhost:3001/products/${categoryId}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${categoryId}`);
     if (!res.ok) {
         throw new Error('Failed to fetch products');
     }
@@ -61,7 +61,7 @@ const CategoriesID = ({ params }) => {
                     <div className="heading_container heading_center my-5">
                         <div className="box">
                             <div className="img-box">
-                                <img src={`http://localhost:3001/img/Categories-image/${category.image}`} alt={category.name} />
+                                <img src={`${process.env.NEXT_PUBLIC_API_URL}/img/Categories-image/${category.image}`} alt={category.name} />
                             </div>
                             <div className="detail-box">
                                 <h2>{category.name}</h2>
