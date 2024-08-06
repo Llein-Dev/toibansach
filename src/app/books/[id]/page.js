@@ -26,7 +26,7 @@ const DetailPage = ({ params }) => {
     const dispatch = useDispatch();
     const totalQuantity = useSelector((state) => state.cart.totalQuantity);
     const cart = useSelector((state) => state.cart);
-    const { data: product, error } = useSWR(`${API}products/product/${id}`, fetcher);
+    const { data: product, error } = useSWR(`${API}/products/product/${id}`, fetcher);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
