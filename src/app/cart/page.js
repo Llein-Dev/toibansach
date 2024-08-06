@@ -7,6 +7,7 @@ import { formatPrice } from '../components/Price';
 import CartItem from '../components/Cart-item/cart';
 import BillDetails from '../components/Cart-item/bill';
 import NoProducts from '../components/Book-item/no-product';
+import { removeFromCart, updateQuantity } from '../redux/slices/cartSlice';
 
 const CartPage = () => {
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const CartPage = () => {
     const cart = useSelector((state) => state.cart.items);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const API = process.env.NEXT_PUBLIC_API_URL || "localhost:3000"
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const originalTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discountedTotal = cart.reduce((sum, item) => {
         const salePercentage = item.sale ? parseFloat(item.sale) : 0;
@@ -24,9 +25,17 @@ const CartPage = () => {
     const discount = originalTotal - discountedTotal;
 
     const handlePlaceOrder = async () => {
-        setIsSubmitting(true);
+        // Lưu giỏ hàng vào API /api/carts (nếu cần)
+        await axios.post(`${API}/carts`, {
+            items: cart,
+            totalQuantity: cart.reduce((sum, item) => sum + item.quantity, 0),
+            totalPrice: discountedTotal
+        });
+
+        // Điều hướng đến trang thanh toán
         router.push('/checkout');
     };
+
 
     const handleRemove = (id) => {
         dispatch(removeFromCart(id));

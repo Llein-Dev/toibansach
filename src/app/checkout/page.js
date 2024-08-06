@@ -1,29 +1,20 @@
 "use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import BillDetails from '../components/Cart-item/bill';
 import { formatPrice } from '../components/Price';
+import BillDetails from '../components/Cart-item/bill';
 
 const CheckoutPage = () => {
-    const API = process.env.NEXT_PUBLIC_API_URL;
-    const mockAddress = "123 Đường Example, Phường 1, Quận 2";
-    const mockPhoneNumber = "0123456789";
-    const mockProvince = "Hà Nội";
-    const mockDistrict = "Hoàn Kiếm";
-    const mockWard = "Hàng Bạc";
-
-    const [address, setAddress] = useState(mockAddress);
-    const [phoneNumber, setPhoneNumber] = useState(mockPhoneNumber);
-    const [paymentMethod, setPaymentMethod] = useState('creditCard');
-    const [province, setProvince] = useState(mockProvince);
-    const [district, setDistrict] = useState(mockDistrict);
-    const [ward, setWard] = useState(mockWard);
-    const [error, setError] = useState(null);
+    const router = useRouter();
     const cart = useSelector((state) => state.cart.items);
+    const [address, setAddress] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-    // Tính toán tổng số tiền
     const originalTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discountedTotal = cart.reduce((sum, item) => {
         const salePercentage = item.sale ? parseFloat(item.sale) : 0;
@@ -32,131 +23,79 @@ const CheckoutPage = () => {
     }, 0);
     const discount = originalTotal - discountedTotal;
 
-    // Chi tiết hóa đơn
+    const handlePlaceOrder = async () => {
+        setIsSubmitting(true);
+        try {
+            const response = await axios.post(`${API}/carts/checkout`, {
+                items: cart,
+                address,
+                paymentMethod,
+            });
+
+            if (response.data.success) {
+                router.push('/order-success'); // Điều hướng đến trang thành công
+            } else {
+                setError(response.data.message);
+            }
+        } catch (err) {
+            console.error('Order Placement Error:', err);
+            setError('There was an error placing your order. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     const billItems = [
         { label: 'Sản phẩm', value: formatPrice(originalTotal) },
         { label: 'Giảm giá', value: `-${formatPrice(discount)}` },
         { label: 'Tổng cộng', value: formatPrice(discountedTotal) }
     ];
 
-    // Xử lý gửi biểu mẫu
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        try {
-            // Chuẩn bị dữ liệu đơn hàng
-            const orderData = {
-                address,
-                phoneNumber,
-                paymentMethod,
-                province,
-                district,
-                ward,
-                cartItems: cart, // Thêm dữ liệu giỏ hàng
-            };
-
-            // Gửi dữ liệu đơn hàng đến máy chủ
-            const response = await axios.post(`${API}/carts/checkout`, orderData);
-
-            if (response.data.success) {
-                alert('Đặt hàng thành công');
-                // Xóa giỏ hàng hoặc chuyển hướng đến trang xác nhận nếu cần
-                // Example: dispatch(clearCart());
-            } else {
-                throw new Error('Đặt hàng thất bại');
-            }
-        } catch (err) {
-            setError('Không thể hoàn tất thanh toán. Vui lòng thử lại.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
     return (
         <div className="container my-5">
             <div className="row">
+                {/* Billing Details Section */}
                 <div className="col-md-8">
-                    <h2 className="mb-4">Thanh toán</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group mb-3">
-                            <label htmlFor="address">Địa chỉ</label>
+                    <div className="checkout-container p-3" style={{ backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
+                        <div className="checkout-header" style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: '#333' }}>
+                            Thanh toán
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="address">Địa chỉ giao hàng</label>
                             <input
                                 type="text"
                                 id="address"
-                                className="form-control"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="phoneNumber">Số điện thoại</label>
-                            <input
-                                type="text"
-                                id="phoneNumber"
                                 className="form-control"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
                                 required
                             />
                         </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="province">Tỉnh</label>
-                            <input
-                                type="text"
-                                id="province"
-                                className="form-control"
-                                value={province}
-                                onChange={(e) => setProvince(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="district">Quận/Huyện</label>
-                            <input
-                                type="text"
-                                id="district"
-                                className="form-control"
-                                value={district}
-                                onChange={(e) => setDistrict(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="ward">Phường/Xã</label>
-                            <input
-                                type="text"
-                                id="ward"
-                                className="form-control"
-                                value={ward}
-                                onChange={(e) => setWard(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="form-group mb-3">
+                        <div className="form-group">
                             <label htmlFor="paymentMethod">Phương thức thanh toán</label>
                             <select
                                 id="paymentMethod"
-                                className="form-control"
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
+                                className="form-control"
+                                required
                             >
-                                <option value="creditCard">Thẻ tín dụng</option>
-                                <option value="paypal">PayPal</option>
-                                {/* Thêm các phương thức thanh toán khác nếu cần */}
+                                <option value="" disabled>Chọn phương thức thanh toán</option>
+                                <option value="cash_on_delivery">Trả tiền sau</option>
+                                <option value="momo">Momo</option>
                             </select>
                         </div>
-
-                    </form>
+                        {error && <p className="text-danger mt-2">{error}</p>}
+                    </div>
                 </div>
+
+                {/* Bill Section */}
                 <div className="col-md-4">
+                    
                     <BillDetails
                         items={billItems}
-                        handlePlaceOrder={handleSubmit}
                         isSubmitting={isSubmitting}
-                        error={error}
-                        setAddress={setAddress}
-                        setPaymentMethod={setPaymentMethod}
+                        handlePlaceOrder={handlePlaceOrder}
                     />
                 </div>
             </div>
