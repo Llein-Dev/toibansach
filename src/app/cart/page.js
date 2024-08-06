@@ -25,16 +25,25 @@ const CartPage = () => {
     const discount = originalTotal - discountedTotal;
 
     const handlePlaceOrder = async () => {
-        // Lưu giỏ hàng vào API /api/carts (nếu cần)
-        await axios.post(`${API}/carts`, {
-            items: cart,
-            totalQuantity: cart.reduce((sum, item) => sum + item.quantity, 0),
-            totalPrice: discountedTotal
-        });
-
-        // Điều hướng đến trang thanh toán
-        router.push('/checkout');
+        try {
+            // Lấy thông tin người dùng từ Redux hoặc từ session
+            const user = useSelector((state) => state.auth.user); // Hoặc cách khác nếu bạn lưu thông tin người dùng
+    
+            // Lưu giỏ hàng vào API /api/carts
+            await axios.post(`${API}/carts`, {
+                user: user._id, 
+                items: cart,
+                totalQuantity: cart.reduce((sum, item) => sum + item.quantity, 0),
+                totalPrice: discountedTotal
+            });
+    
+            router.push('/checkout');
+        } catch (err) {
+            console.error('Error placing order:', err);
+            setError('Error placing order');
+        }
     };
+    
 
 
     const handleRemove = (id) => {
