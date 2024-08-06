@@ -70,7 +70,7 @@ const DetailPage = ({ params }) => {
         fetchRelatedProducts();
     }, []);
 
-    if (error) return <div className="error-message"><strong>Lỗi khi tải sản phẩm.</strong></div>;
+    if (error) return <div className="error-message h-100"><strong>Lỗi khi tải sản phẩm.</strong></div>;
     if (!product) return <div className="loading"><p>Loading...</p><div className="spinner"></div></div>;
 
     let discountedPrice = 'N/A';
