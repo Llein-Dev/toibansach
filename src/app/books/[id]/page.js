@@ -36,7 +36,7 @@ const DetailPage = ({ params }) => {
         dispatch(addToCart({ item: product, quantity }));
 
         try {
-            const response = await axios.post(`${API}carts/api/cart`, { // Đảm bảo URL chính xác
+            const response = await axios.post(`${API}/carts/api/cart`, { // Đảm bảo URL chính xác
                 items: cart.items,
                 totalQuantity: cart.totalQuantity,
                 totalPrice: cart.totalPrice
