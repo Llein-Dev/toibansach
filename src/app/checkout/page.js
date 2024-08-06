@@ -13,8 +13,8 @@ const CheckoutPage = () => {
     const [paymentMethod, setPaymentMethod] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
+    const API =process.env.NEXT_PUBLIC_API_URL;;
+    // process.env.NEXT_PUBLIC_API_URL ||
     const originalTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discountedTotal = cart.reduce((sum, item) => {
         const salePercentage = item.sale ? parseFloat(item.sale) : 0;
@@ -22,11 +22,12 @@ const CheckoutPage = () => {
         return sum + discountedPrice * item.quantity;
     }, 0);
     const discount = originalTotal - discountedTotal;
-
+    const userPayload = JSON.parse(localStorage.getItem('userPayload'));
     const handlePlaceOrder = async () => {
         setIsSubmitting(true);
         try {
             const response = await axios.post(`${API}/carts/checkout`, {
+                user: userPayload.id,
                 items: cart,
                 address,
                 paymentMethod,
@@ -91,7 +92,7 @@ const CheckoutPage = () => {
 
                 {/* Bill Section */}
                 <div className="col-md-4">
-                    
+
                     <BillDetails
                         items={billItems}
                         isSubmitting={isSubmitting}
