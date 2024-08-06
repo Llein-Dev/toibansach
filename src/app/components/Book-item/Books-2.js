@@ -6,10 +6,7 @@ const BookMiniComponent = ({ books }) => {
     return (
         <>
             {books.map((book) => {
-                let relatedDiscountedPrice = 'N/A';
-                if (typeof book.price === 'number' && typeof book.sale === 'number') {
-                    relatedDiscountedPrice = book.price - (book.price * book.sale / 100);
-                }
+                const discountedPrice = book.price - (book.price * book.sale / 100);
 
                 return (
                     <Link href={`/books/${book._id}`} legacyBehavior key={book._id}>
@@ -34,7 +31,7 @@ const BookMiniComponent = ({ books }) => {
                                             </p>
                                         )}
                                         <h5 className="mx-2 related-product-price">
-                                            {formatPrice(relatedDiscountedPrice)}
+                                            {formatPrice(discountedPrice)}
                                         </h5>
                                     </div>
 

@@ -4,7 +4,7 @@ import { logout } from '@/app/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faUser, faHistory, faCog, faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 
 const Profile = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -32,6 +32,11 @@ const Profile = () => {
         setShowMenu((prev) => !prev);
     };
 
+    const toggleAdmin = () => {
+        router.push('/admin');
+        setShowMenu(false); // Close menu on admin panel redirection
+    };
+
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem('token');
@@ -52,22 +57,34 @@ const Profile = () => {
 
     return (
         <div>
-            <button className="btn btn-light d-flex" onClick={toggleMenu}>
-                Welcome, {user.fullname}!
+            <button className="btn btn-light d-flex align-items-center" onClick={toggleMenu}>
+                Welcome, <span className='fw-bold mx-2'>{user.fullname}</span>!
             </button>
             {showMenu && (
                 <div className="dropdown-menu-2">
                     <Link href="/profile" legacyBehavior>
-                        <button className="btn btn-light" onClick={toggleMenu}>
-                            <FontAwesomeIcon icon={faUser} /> Manage Profile
-                        </button>
+                        <a className="btn text-start btn-light d-flex align-items-center" onClick={toggleMenu}>
+                            <FontAwesomeIcon icon={faUser} className="me-3" /> Manage Profile
+                        </a>
                     </Link>
                     <Link href="/cart" legacyBehavior>
-                        <button className="btn btn-light" onClick={toggleMenu}>
-                            <FontAwesomeIcon icon={faShoppingCart} /> Cart
-                        </button>
+                        <a className="btn text-start btn-light d-flex align-items-center" onClick={toggleMenu}>
+                            <FontAwesomeIcon icon={faShoppingCart} className="me-3" /> Cart
+                        </a>
                     </Link>
-                    <button onClick={handleLogout} className="btn btn-light">Logout</button>
+                    <Link href="/order" legacyBehavior>
+                        <a className="btn text-start btn-light d-flex align-items-center" onClick={toggleMenu}>
+                            <FontAwesomeIcon icon={faHistory} className="me-3" /> Order
+                        </a>
+                    </Link>
+                    {user.role === 'admin' && (
+                        <a className="btn text-start btn-dark d-flex align-items-center py-2 " onClick={toggleAdmin}>
+                            <FontAwesomeIcon icon={faCog} className="me-3" /> Admin Panel
+                        </a>
+                    )}
+                    <button onClick={handleLogout} className="btn border-top text-start btn-light d-flex align-items-center">
+                        <FontAwesomeIcon icon={faDoorClosed} className="me-3" /> Logout
+                    </button>
                 </div>
             )}
         </div>

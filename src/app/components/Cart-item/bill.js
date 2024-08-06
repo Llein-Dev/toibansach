@@ -1,28 +1,6 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
-const BillDetails = ({ items }) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart.items);
-
-    const handleCheckout = async () => {
-        setIsSubmitting(true);
-        try {
-            console.log('Cart data being sent:', cart); // Log cart data
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/carts/checkout`, { items: cart });
-            if (response.status === 201) {
-                // Handle successful checkout
-            }
-        } catch (error) {
-            console.error('Error submitting cart:', error.response ? error.response.data : error.message);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-
+const BillDetails = ({ items, handlePlaceOrder, isSubmitting, error, setAddress, setPaymentMethod }) => {
     return (
         <div className="bill-container p-3" style={{ backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
             <div className="cart-header" style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: '#333' }}>
@@ -37,7 +15,10 @@ const BillDetails = ({ items }) => {
                 ))}
             </div>
             <div className="checkout-btn text-right mt-3">
-                <button className="btn btn-success" onClick={handleCheckout} disabled={isSubmitting}>Thanh toán</button>
+                <button className="btn btn-success" onClick={handlePlaceOrder} disabled={isSubmitting}>
+                    Checkout
+                </button>
+                {error && <p className="text-danger mt-2">{error}</p>}
             </div>
         </div>
     );

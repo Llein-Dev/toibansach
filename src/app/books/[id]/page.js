@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
 import { addToCart } from '@/app/redux/slices/cartSlice';
@@ -9,7 +9,6 @@ import BookMiniComponent from '@/app/components/Book-item/Books-2';
 import axios from 'axios';
 
 const API = process.env.NEXT_PUBLIC_API_URL;
-// Fetcher function for SWR
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const formatPrice = (price) => {
@@ -31,24 +30,22 @@ const DetailPage = ({ params }) => {
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
 
-
     const handleAddToCart = async () => {
         dispatch(addToCart({ item: product, quantity }));
 
         try {
-            const response = await axios.post(`${API}/carts`, { // Đảm bảo URL chính xác
+            const response = await axios.post(`${API}/carts`, {
                 items: cart.items,
                 totalQuantity: cart.totalQuantity,
                 totalPrice: cart.totalPrice
             });
             console.log('Cart submitted successfully');
-            console.log('Added Product:', product); // Hiển thị thông tin sản phẩm vừa thêm
-            console.log('Total Quantity:', cart.totalQuantity); // Hiển thị số lượng sản phẩm
+            console.log('Added Product:', product);
+            console.log('Total Quantity:', cart.totalQuantity);
         } catch (error) {
             console.error('Failed to submit cart:', error);
         }
     };
-
 
     useEffect(() => {
         const fetchRelatedProducts = async () => {
@@ -73,10 +70,7 @@ const DetailPage = ({ params }) => {
     if (error) return <div className="error-message h-100"><strong>Lỗi khi tải sản phẩm.</strong></div>;
     if (!product) return <div className="loading"><p>Loading...</p><div className="spinner"></div></div>;
 
-    let discountedPrice = 'N/A';
-    if (typeof product.price === 'number' && typeof product.sale === 'number') {
-        discountedPrice = product.price - (product.price * product.sale / 100);
-    }
+    const discountedPrice = product.price - (product.price * product.sale / 100);
 
     return (
         <section className="py-5 detail-page">
@@ -85,7 +79,7 @@ const DetailPage = ({ params }) => {
                     <div className="col-md-6">
                         <img
                             className="product-image"
-                            src={`${process.env.NEXT_PUBLIC_API_URL}/img/Books-image/${product.image}`}
+                            src={`${API}/img/Books-image/${product.image}`}
                             height={600}
                             alt={product.name}
                         />
@@ -96,9 +90,13 @@ const DetailPage = ({ params }) => {
                             <span className="text-decoration-line-through old-price">
                                 {formatPrice(product.price)}
                             </span>
-                            <span className="current-price">
-                                {typeof discountedPrice === 'number' ? formatPrice(discountedPrice) : 'N/A'}
-                            </span>
+                            {discountedPrice !== null ? (
+                                <span className="current-price">
+                                    {formatPrice(discountedPrice)}
+                                </span>
+                            ) : (
+                                <span className="current-price">N/A</span>
+                            )}
                         </div>
                         <p className="description-limited">{product.description}</p>
                         <div className="d-flex align-items-center">
@@ -107,7 +105,7 @@ const DetailPage = ({ params }) => {
                                 type="number"
                                 min="1"
                                 value={quantity}
-                                onChange={(e) => setQuantity(Number(e.target.value))}
+                                onChange={(e) => setQuantity(Number(e.target.value) > 0 ? Number(e.target.value) : 1)}
                             />
                             <button
                                 className="btn btn-custom my-2"
@@ -167,7 +165,6 @@ const DetailPage = ({ params }) => {
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
     );
