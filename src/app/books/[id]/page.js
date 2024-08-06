@@ -26,7 +26,7 @@ const DetailPage = ({ params }) => {
     const dispatch = useDispatch();
     const totalQuantity = useSelector((state) => state.cart.totalQuantity);
     const cart = useSelector((state) => state.cart);
-    const { data: product, error } = useSWR(`${API}/products/product/${id}`, fetcher);
+    const { data: product, error } = useSWR(`${API}/products/${id}`, fetcher);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
@@ -36,7 +36,7 @@ const DetailPage = ({ params }) => {
         dispatch(addToCart({ item: product, quantity }));
 
         try {
-            const response = await axios.post(`${API}/carts/api/cart`, { // Đảm bảo URL chính xác
+            const response = await axios.post(`${API}/carts`, { // Đảm bảo URL chính xác
                 items: cart.items,
                 totalQuantity: cart.totalQuantity,
                 totalPrice: cart.totalPrice
