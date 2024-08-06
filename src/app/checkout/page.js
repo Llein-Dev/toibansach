@@ -13,8 +13,8 @@ const CheckoutPage = () => {
     const [paymentMethod, setPaymentMethod] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const API =process.env.NEXT_PUBLIC_API_URL;;
-    // process.env.NEXT_PUBLIC_API_URL ||
+    const API = process.env.NEXT_PUBLIC_API_URL;
+
     const originalTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const discountedTotal = cart.reduce((sum, item) => {
         const salePercentage = item.sale ? parseFloat(item.sale) : 0;
@@ -22,8 +22,15 @@ const CheckoutPage = () => {
         return sum + discountedPrice * item.quantity;
     }, 0);
     const discount = originalTotal - discountedTotal;
+
     const userPayload = JSON.parse(localStorage.getItem('userPayload'));
+
     const handlePlaceOrder = async () => {
+        if (!address || !paymentMethod) {
+            setError('Please fill in all required fields.');
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const response = await axios.post(`${API}/carts/checkout`, {
@@ -34,7 +41,8 @@ const CheckoutPage = () => {
             });
 
             if (response.data.success) {
-                router.push('/order-success'); // Điều hướng đến trang thành công
+                alert("Đã Đặt Hàng Thành Công")
+                router.push('/order'); // Navigate to success page
             } else {
                 setError(response.data.message);
             }
@@ -69,6 +77,7 @@ const CheckoutPage = () => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 className="form-control"
+                                placeholder="Nhập địa chỉ giao hàng (ví dụ: 123 Phố Hoàng Mai, Hà Nội)"
                                 required
                             />
                         </div>
@@ -92,7 +101,6 @@ const CheckoutPage = () => {
 
                 {/* Bill Section */}
                 <div className="col-md-4">
-
                     <BillDetails
                         items={billItems}
                         isSubmitting={isSubmitting}

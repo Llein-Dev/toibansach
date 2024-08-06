@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { formatPrice } from '../components/Price';
 
-const API =process.env.NEXT_PUBLIC_API_URL;;
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
@@ -38,40 +39,38 @@ const OrdersPage = () => {
     if (error) return <p>Error: {error}</p>;
 
     return (
-        <div className='container'>
-            <h1>Order History</h1>
+        <div className='container py-5'>
+            <div class="heading_container my-4 heading_center"><h2>Order</h2></div>
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>Order ID</th>
-                        <th>Total Amount</th>
-
+                        <th>#</th>
+                        <th>Đơn Hàng</th>
                         <th>Address</th>
-
+                        <th>Total</th>
                         <th>Date</th>
-                        <th>Items</th>
                     </tr>
                 </thead>
                 <tbody>
                     {orders.length > 0 ? (
-                        orders.map(order => (
+                        orders.map((order, index) => (
                             <tr key={order._id}>
-                                <td>{order._id}</td>
-                                <td>{order.totalAmount.toFixed(2)}</td>
-                                <td>{order.address}</td>
-                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                                <td>{index + 1}</td>
                                 <td>
-                                    <ul>
-                                        {order.items.map((item, index) => (
-                                            <li className='list-none' key={index}>{item.name} (Quantity: {item.quantity})</li>
+                                    <ul className='list-unstyled'>
+                                        {order.items.map((item, idx) => (
+                                            <li key={idx}>{item.name} (x {item.quantity})</li>
                                         ))}
                                     </ul>
                                 </td>
+                                <td>{order.address}</td>
+                                <td>{formatPrice(order.totalAmount)}</td>
+                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="7">No orders found</td>
+                            <td colSpan="5">No orders found</td>
                         </tr>
                     )}
                 </tbody>
