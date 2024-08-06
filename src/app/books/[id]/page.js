@@ -54,7 +54,7 @@ const DetailPage = ({ params }) => {
         const fetchRelatedProducts = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+                const res = await fetch(`${API}/products`);
                 if (!res.ok) throw new Error('Failed to fetch related products');
                 const data = await res.json();
                 setFilteredProducts(data);
