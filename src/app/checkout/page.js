@@ -23,7 +23,6 @@ const CheckoutPage = () => {
     }, 0);
     const discount = originalTotal - discountedTotal;
 
-    const userPayload = JSON.parse(localStorage.getItem('userPayload'));
 
     const handlePlaceOrder = async () => {
         if (!address || !paymentMethod) {
@@ -33,6 +32,7 @@ const CheckoutPage = () => {
 
         setIsSubmitting(true);
         try {
+            const userPayload = JSON.parse(localStorage.getItem('userPayload'));
             const response = await axios.post(`${API}/carts/checkout`, {
                 user: userPayload.id,
                 items: cart,

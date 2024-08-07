@@ -23,9 +23,10 @@ const CartPage = () => {
         return sum + discountedPrice * item.quantity;
     }, 0);
     const discount = originalTotal - discountedTotal;
-    const userPayload = JSON.parse(localStorage.getItem('userPayload'));
+ 
     const handlePlaceOrder = async () => {
         try {
+            const userPayload = JSON.parse(localStorage.getItem('userPayload'));
             await axios.post(`${API}/carts`, {
                 user: userPayload.id,
                 items: cart,
