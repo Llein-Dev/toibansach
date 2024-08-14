@@ -1,31 +1,33 @@
+// src/components/AboutComponent.js
 const AboutComponent = () => {
     return (
-        <section class="about_section layout_padding">
-            <div class="container ">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="img-box">
-                            <img src="images/about-img.png" alt="" />
+        <section className="about_section layout_padding">
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="img-box">
+                            <img src="images/about-img.png" alt="About Our Bookstore" />
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="detail-box">
-                            <div class="heading_container">
+                    <div className="col-md-6">
+                        <div className="detail-box">
+                            <div className="heading_container">
                                 <h2>
-                                    About Our Bookstore
+                                    Giới Thiệu Về Cửa Hàng Sách Của Chúng Tôi
                                 </h2>
                             </div>
                             <p>
-                                At cumque tenetur iste molestiae, vel eum reiciendis assumenda! Numquam, repudiandae. Consequuntur obcaecati recusandae aliquam, amet doloribus eius dolores officiis cumque? Quibusdam praesentium pariatur sapiente mollitia, amet hic iusto voluptas! Iusto quo earum vitae excepturi, ipsam aliquid deleniti assumenda culpa deserunt.
+                                Chào mừng bạn đến với cửa hàng sách của chúng tôi, nơi cung cấp một bộ sưu tập phong phú các đầu sách từ văn học cổ điển đến sách hiện đại. Chúng tôi cam kết mang đến cho bạn những cuốn sách chất lượng cao và dịch vụ khách hàng tận tâm. Tại cửa hàng của chúng tôi, bạn có thể tìm thấy những cuốn sách phù hợp với sở thích và nhu cầu đọc của mình. Hãy đến và khám phá thế giới sách tuyệt vời với chúng tôi!
                             </p>
-                            <a href="">
-                                Read More
+                            <a href="/about">
+                                Đọc Thêm
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
+
 export default AboutComponent;

@@ -1,88 +1,72 @@
+// src/components/CustomerComponent.js
 export default function CustomerComponent() {
     return (
-        <section class="client_section layout_padding">
-            <div class="container ">
-                <div class="heading_container heading_center">
-                    <h2>
-                        What Says Customers
-                    </h2>
+        <section className="client_section layout_padding">
+            <div className="container">
+                <div className="heading_container heading_center">
+                    <h2>Nhận Xét Của Khách Hàng</h2>
                     <hr />
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mx-auto">
-                        <div class="client_container ">
-                            <div class="detail-box">
+                <div className="row">
+                    <div className="col-md-4 mx-auto">
+                        <div className="client_container">
+                            <div className="detail-box">
                                 <p>
-                                    Editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover
-                                    many web sites still in their infancy. Various versions have evolved over the years, sometimes by
+                                    "Dịch vụ tuyệt vời và sách chất lượng. Tôi đã tìm thấy nhiều cuốn sách mà tôi yêu thích tại đây. Tôi chắc chắn sẽ quay lại!"
                                 </p>
                                 <span>
-                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                    <i className="fa fa-quote-left" aria-hidden="true"></i>
                                 </span>
                             </div>
-                            <div class="client_id">
-                                <div class="img-box">
-                                    <img src="images/c1.jpg" alt="" />
+                            <div className="client_id">
+                                <div className="img-box">
+                                    <img src="https://lh3.googleusercontent.com/a/ACg8ocIbmNhGrhxZgK1D7rCfylLbLNf4TzMvQjZ-uS64aHsWShBOB3co=s396-c-no" alt="Customer 1" />
                                 </div>
-                                <div class="client_name">
-                                    <h5>
-                                        Jone Mark
-                                    </h5>
-                                    <h6>
-                                        Student
-                                    </h6>
+                                <div className="client_name">
+                                    <h5>Nguyễn Thị Lan</h5>
+                                    <h6>Giáo viên</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mx-auto">
-                        <div class="client_container ">
-                            <div class="detail-box">
+                    <div className="col-md-4 mx-auto">
+                        <div className="client_container">
+                            <div className="detail-box">
                                 <p>
-                                    Editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover
-                                    many web sites still in their infancy. Various versions have evolved over the years, sometimes by
+                                    "Một địa điểm tuyệt vời để mua sách. Dịch vụ khách hàng thân thiện và giao hàng nhanh chóng."
                                 </p>
                                 <span>
-                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                    <i className="fa fa-quote-left" aria-hidden="true"></i>
                                 </span>
                             </div>
-                            <div class="client_id">
-                                <div class="img-box">
-                                    <img src="images/c2.jpg" alt="" />
+                            <div className="client_id">
+                                <div className="img-box">
+                                    <img src="https://lh3.googleusercontent.com/a/ACg8ocIoQ5L2ttW2MjWGCCWPqHoD67DSeOeyoTHCLmkL5Ky4xEc01L47fQ=s360-c-no" alt="Customer 2" />
                                 </div>
-                                <div class="client_name">
-                                    <h5>
-                                        Anna Crowe
-                                    </h5>
-                                    <h6>
-                                        Student
-                                    </h6>
+                                <div className="client_name">
+                                    <h5>Trần Văn Nam</h5>
+                                    <h6>Nhà văn</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 mx-auto">
-                        <div class="client_container ">
-                            <div class="detail-box">
+                    <div className="col-md-4 mx-auto">
+                        <div className="client_container">
+                            <div className="detail-box">
                                 <p>
-                                    Editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover
-                                    many web sites still in their infancy. Various versions have evolved over the years, sometimes by
+                                    "Sách phong phú và giá cả hợp lý. Tôi đã tìm thấy nhiều cuốn sách hay để đọc trong thời gian rảnh."
                                 </p>
                                 <span>
-                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                    <i className="fa fa-quote-left" aria-hidden="true"></i>
                                 </span>
                             </div>
-                            <div class="client_id">
-                                <div class="img-box">
-                                    <img src="images/c3.jpg" alt="" />
+                            <div className="client_id">
+                                <div className="img-box">
+                                    <img src="https://lh3.googleusercontent.com/a/ACg8ocIbmNhGrhxZgK1D7rCfylLbLNf4TzMvQjZ-uS64aHsWShBOB3co=s396-c-no" alt="Customer 3" />
                                 </div>
-                                <div class="client_name">
-                                    <h5>
-                                        Hilley James
-                                    </h5>
-                                    <h6>
-                                        Student
-                                    </h6>
+                                <div className="client_name">
+                                    <h5>Vũ Minh Tuấn</h5>
+                                    <h6>Nhà báo</h6>
                                 </div>
                             </div>
                         </div>
@@ -90,5 +74,5 @@ export default function CustomerComponent() {
                 </div>
             </div>
         </section>
-    )
+    );
 }

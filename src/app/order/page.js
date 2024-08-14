@@ -2,13 +2,16 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { formatPrice } from '../components/Price';
+import { useRouter } from 'next/navigation';
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = process.env.NEXT_PUBLIC_API_URL;
+const API = "http://localhost:3000"
 
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -23,7 +26,7 @@ const OrdersPage = () => {
                     throw new Error('User ID not found in payload');
                 }
 
-                const response = await axios.get(`${API}/carts/orders/${user.id}`);
+                const response = await axios.get(`${API}/carts/orders/user/${user.id}`);
                 setOrders(response.data.data);
             } catch (error) {
                 setError(error.message);
@@ -40,7 +43,7 @@ const OrdersPage = () => {
 
     return (
         <div className='container py-5'>
-            <div class="heading_container my-4 heading_center"><h2>Order</h2></div>
+            <div className="heading_container my-4 heading_center"><h2>Order</h2></div>
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -54,7 +57,11 @@ const OrdersPage = () => {
                 <tbody>
                     {orders.length > 0 ? (
                         orders.map((order, index) => (
-                            <tr key={order._id}>
+                            <tr 
+                                key={order._id}
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => router.push(`/order/${order._id}`)}
+                            >
                                 <td>{index + 1}</td>
                                 <td>
                                     <ul className='list-unstyled'>
