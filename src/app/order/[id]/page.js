@@ -3,7 +3,7 @@ import { formatPrice } from '../../components/Price';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/order.css'
 
-const API = "http://localhost:3000";
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function OrderDetailPage({ params }) {
     const { id } = params;
@@ -37,11 +37,11 @@ export default async function OrderDetailPage({ params }) {
                                 <p><strong className='text-dark'>Date:</strong> {new Date(data.data.createdAt).toLocaleDateString()}</p>
                                 <p><strong className='text-dark'>Total Amount:</strong> {formatPrice(data.data.totalAmount)}</p>
                                 <p><strong className='text-dark'>Status:</strong> <button className='btn btn-primary'>{data.data.status}</button></p>
-                            </div>  
+                            </div>
                             <div className='col-md-6'>
                                 <p><strong className='text-dark'>Discount:</strong> {formatPrice(data.data.discount)}</p>
                                 <p><strong className='text-dark'>Payment Method:</strong> {data.data.paymentMethod}</p>
-                                
+
                             </div>
                         </div>
 

@@ -4,8 +4,8 @@ import axios from 'axios';
 import { formatPrice } from '../components/Price';
 import { useRouter } from 'next/navigation';
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
-const API = "http://localhost:3000"
+const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = "http://localhost:3000"
 
 const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
