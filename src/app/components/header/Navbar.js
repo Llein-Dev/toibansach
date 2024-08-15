@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useSelector } from 'react-redux'; // Import useSelector to access Redux state
 import CartModal from '../Cart-item/cart-modal';
 import SearchComponent from './SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +21,10 @@ const NavbarComponent = () => {
     const [showCart, setShowCart] = useState(false);
     const handleShowCart = () => setShowCart(true);
     const handleCloseCart = () => setShowCart(false);
+
+    // Use useSelector to access cart items from Redux state
+    const cart = useSelector((state) => state.cart.items);
+    const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
     return (
         <>
@@ -55,10 +60,16 @@ const NavbarComponent = () => {
                         <div className='d-flex align-items-center'>
                             <SearchComponent />
                             <button
-                                className="btn btn-custom mx-3"
+                                className="btn btn-custom mx-3 position-relative"
                                 onClick={handleShowCart}
                             >
                                 <FontAwesomeIcon icon={faShoppingCart} />
+                                {itemCount > 0 && (
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {itemCount}
+                                        <span className="visually-hidden">unread messages</span>
+                                    </span>
+                                )}
                             </button>
                             <Profile />
                         </div>

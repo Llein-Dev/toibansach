@@ -1,71 +1,114 @@
-"use client";
-import useSWR from 'swr';
+
+'use client';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import useSWR from 'swr';
+import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '@/app/redux/slices/cartSlice';
-import { useSelector, useDispatch } from "react-redux";
+import BookMiniComponent from '@/app/components/Book-item/Books-2';
+import NotificationPopup from '@/app/components/notion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
-import BookMiniComponent from '@/app/components/Book-item/Books-2';
-import axios from 'axios';
+import { formatPrice } from '@/app/components/Price';
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+const API = "http://localhost:3000";
+
 const fetcher = (url) => fetch(url).then((res) => res.json());
-
-const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-        minimumFractionDigits: 0,
-    }).format(price);
-};
 
 const DetailPage = ({ params }) => {
     const { id } = params;
     const [quantity, setQuantity] = useState(1);
-    const dispatch = useDispatch();
-    const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-    const cart = useSelector((state) => state.cart);
-    const { data: product, error } = useSWR(`${API}/products/${id}`, fetcher);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [comment, setComment] = useState('');
+    const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const dispatch = useDispatch();
+    const cart = useSelector((state) => state.cart);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState('');
+    const [popupMessage, setPopupMessage] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userID, setUserID] = useState(null);
+    const [Fullname, setFullname] = useState(null);
+    const [Image, setImage] = useState(null);
+
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('userPayload'));
+        if (user && user.id) {
+            setUserID(user.id);
+            setFullname(user.fullname);
+            setImage(user.image);
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     const handleAddToCart = async () => {
-        dispatch(addToCart({ item: product, quantity }));
+        try {
+            dispatch(addToCart({ item: product, quantity }));
+            setPopupType('success');
+            setPopupMessage('Sản phẩm đã được thêm vào giỏ hàng!');
+            setShowPopup(true);
+        } catch (error) {
+            setPopupType('error');
+            setPopupMessage('Không thể thêm sản phẩm vào giỏ hàng.');
+            setShowPopup(true);
+        }
+    };
+
+
+    const handleCommentSubmit = async () => {
+        if (!comment.trim()) {
+            alert("Bình luận không được để trống.");
+            return;
+        }
 
         try {
-            const response = await axios.post(`${API}/carts`, {
-                items: cart.items,
-                totalQuantity: cart.totalQuantity,
-                totalPrice: cart.totalPrice
+            const response = await axios.post(`${API}/comment`, {
+                productId: id,
+                userID: userID,
+                comment,
+                fullname: Fullname, // Add fullname
+                image: Image// Add image
             });
-            console.log('Cart submitted successfully');
-            console.log('Added Product:', product);
-            console.log('Total Quantity:', cart.totalQuantity);
+            setComment('');
+            fetchComments();
         } catch (error) {
-            console.error('Failed to submit cart:', error);
+            console.error('Failed to submit comment:', error);
+        }
+    };
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`${API}/comment/${id}`);
+            setComments(response.data);
+        } catch (error) {
+            console.error('Failed to fetch comments:', error);
+        }
+    };
+
+    const fetchRelatedProducts = async () => {
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const res = await fetch(`${API}/products`);
+            if (!res.ok) throw new Error('Failed to fetch related products');
+            const data = await res.json();
+            setFilteredProducts(data);
+        } catch (error) {
+            setFetchError(error.message);
+            setFilteredProducts([]);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        const fetchRelatedProducts = async () => {
-            try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const res = await fetch(`${API}/products`);
-                if (!res.ok) throw new Error('Failed to fetch related products');
-                const data = await res.json();
-                setFilteredProducts(data);
-            } catch (error) {
-                console.error('Error fetching related products:', error.message);
-                setFetchError(error.message);
-                setFilteredProducts([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
+        fetchComments();
         fetchRelatedProducts();
     }, []);
+
+    const { data: product, error } = useSWR(`${API}/products/${id}`, fetcher);
 
     if (error) return <div className="error-message h-100"><strong>Lỗi khi tải sản phẩm.</strong></div>;
     if (!product) return <div className="loading"><p>Loading...</p><div className="spinner"></div></div>;
@@ -147,6 +190,57 @@ const DetailPage = ({ params }) => {
                     </div>
                 </div>
                 <div className="row mt-5">
+                    <div className="col-12 ">
+                        <h2 className="text-center mb-4">Comments</h2>
+                        <div className="comment-form d-flex align-items-start ">
+                            <img
+                                src={Image ? `${API}/images/Users-image/${Image}` : `${API}/images/Users-image/avatar.jpg`} // Hình đại diện người dùng
+                                alt="user-avatar"
+                                className="avatar rounded-circle me-3"
+                                style={{ width: '50px', height: '50px' }}
+                            />
+                            <div className="flex-grow-1">
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    placeholder="Viết bình luận..."
+                                ></textarea>
+                                <button
+                                    className="btn btn-primary mt-2 float-right"
+                                    onClick={handleCommentSubmit}
+                                >
+                                    Gửi bình luận
+                                </button>
+                            </div>
+                        </div>
+                        <div className="comments-list mt-4">
+                            {comments.length > 0 ? (
+                                comments.map((com) => (
+                                    <div key={com._id} className="comment-item d-flex align-items-start mb-4">
+                                        <img
+                                            src={com.image ? `${API}/images/Users-image/${com.image}` : `${API}/images/Users-image/avatar.jpg`}
+                                            alt={com.image || 'avatar'}
+                                            className="avatar rounded-circle me-3"
+                                            style={{ width: '50px', height: '50px' }}
+                                        />
+                                        <div className="comment-content">
+                                            <strong className="username">{com.fullname}</strong>
+                                            <p className="comment">{com.comment}</p>
+                                            <small className="text-muted">{new Date(com.createdAt).toLocaleString()}</small>
+
+
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-center">Chưa có bình luận nào.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className="row mt-5">
                     <div className="col-12">
                         <h2 className="text-center mb-4">You May Also Like</h2>
                         <div className="row">
@@ -166,7 +260,8 @@ const DetailPage = ({ params }) => {
                     </div>
                 </div>
             </div>
-        </section>
+            {showPopup && <NotificationPopup type={popupType} message={popupMessage} onClose={() => setShowPopup(false)} />}
+        </section >
     );
 };
 
