@@ -26,7 +26,7 @@ p {
   padding: 75px 0;
 }
 
-.order:hover{
+.order:hover {
   background-color: #ccc;
 }
 
@@ -277,6 +277,7 @@ a:focus {
   color: #ffffff7c;
   text-align: center;
   transition: 0.2s ease-in;
+  
 }
 
 .nav-link:hover {

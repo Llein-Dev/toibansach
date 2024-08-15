@@ -12,6 +12,7 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { formatPrice } from '@/app/components/Price';
 
 const API = "http://localhost:3000";
+// const API = process.env.NEXT_PUBLIC_API_URL;
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
