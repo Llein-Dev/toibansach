@@ -1,26 +1,8 @@
-"use client"
+"use client";
 
+import axios from 'axios';
 import BookComponent from '@/app/components/Book-item/Book';
 import { useEffect, useState } from 'react';
-
-
-async function fetchCategories(categoryId) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/category/${categoryId}`);
-    if (!res.ok) {
-        throw new Error('Failed to fetch categories');
-    }
-    const data = await res.json();
-    return data;
-}
-
-async function fetchCategoryProducts(categoryId) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/category/${categoryId}`);
-    if (!res.ok) {
-        throw new Error('Failed to fetch products');
-    }
-    const data = await res.json();
-    return data;
-}
 
 const CategoriesID = ({ params }) => {
     const categoryId = params.id;
@@ -34,11 +16,11 @@ const CategoriesID = ({ params }) => {
             setLoading(true);
             setFetchError(null);
             try {
-                const categoryData = await fetchCategories(categoryId);
-                setCategory(categoryData);
+                const categoryResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryId}`);
+                setCategory(categoryResponse.data);
 
-                const productsData = await fetchCategoryProducts(categoryId);
-                setProducts(productsData);
+                const productsResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/category/${categoryId}`);
+                setProducts(productsResponse.data);
             } catch (error) {
                 console.error('Error fetching data:', error.message);
                 setFetchError(error.message);
@@ -54,9 +36,11 @@ const CategoriesID = ({ params }) => {
     if (loading) return <p>Đang tải dữ liệu...</p>;
     if (fetchError) return <p>Lỗi khi tải dữ liệu: {fetchError}</p>;
 
+    if (!category) return <p>Không tìm thấy danh mục này.</p>; // Fallback for null category
+
     return (
         <section className="catagory_section mb-5">
-            <div className="catagory_container">
+            <div className="category_container">
                 <div className="container">
                     <div className="heading_container heading_center my-5">
                         <div className="box">
@@ -64,7 +48,7 @@ const CategoriesID = ({ params }) => {
                                 <img src={`${process.env.NEXT_PUBLIC_API_URL}/img/Categories-image/${category.image}`} alt={category.name} />
                             </div>
                             <div className="detail-box">
-                                <h2>{category.name}</h2>
+                                <h5>{category.name}</h5>
                                 <p>{category.description}</p>
                             </div>
                         </div>
@@ -74,7 +58,7 @@ const CategoriesID = ({ params }) => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     );
 };
 
