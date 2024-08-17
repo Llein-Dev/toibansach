@@ -47,6 +47,9 @@ const CartPage = () => {
                 totalPrice: discountedTotal
             });
 
+            // Redirect to the checkout page after successful order placement
+            handleClosePopupAndRedirect();
+
         } catch (err) {
             console.error('Error placing order:', err);
             setPopupType('error');
@@ -55,6 +58,11 @@ const CartPage = () => {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleClosePopupAndRedirect = () => {
+        setShowPopup(false);
+        router.push('/checkout');
     };
 
     const handleRemove = (id) => {
@@ -66,11 +74,6 @@ const CartPage = () => {
         { label: 'Giảm giá', value: `-${formatPrice(discount)}` },
         { label: 'Tổng cộng', value: formatPrice(discountedTotal) }
     ];
-
-    const handleClosePopupAndRedirect = () => {
-        setShowPopup(false);
-        router.push('/checkout');
-    };
 
     return (
         <div className="container my-5">
