@@ -4,7 +4,7 @@ export default function CustomerComponent() {
         <section className="client_section layout_padding">
             <div className="container">
                 <div className="heading_container heading_center">
-                    <h2>Nhận Xét Của Khách Hàng</h2>
+                    <h2>Reviews</h2>
                     <hr />
                 </div>
                 <div className="row">
