@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import NotificationPopup from '../components/notion';
 
-const API = "http://localhost:3000";
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 const SignupPage = () => {
     const [fullName, setFullName] = useState('');

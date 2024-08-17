@@ -4,8 +4,8 @@ import axios from 'axios';
 import NotificationPopup from '@/app/components/notion';
 import { useRouter } from 'next/navigation';
 
-const API = "http://localhost:3000";
 
+const API = process.env.NEXT_PUBLIC_API_URL;
 const ResetPasswordPage = ({ params }) => {
     const { id } = params;
     const router = useRouter();

@@ -3,8 +3,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import NotificationPopup from '../components/notion';
 
-const API = "http://localhost:3000";
 
+const API = process.env.NEXT_PUBLIC_API_URL;
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [showPopup, setShowPopup] = useState(false);
