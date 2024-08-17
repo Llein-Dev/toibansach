@@ -59,7 +59,7 @@ const InfoComponent = () => {
                         <div className="col-md-6 col-lg-4 mb-4">
                             <div className="h-100 border-0">
                                 <div className="text-center">
-                                    <h4 className="my-4">Điều Hướng</h4>
+                                    <h4 className="my-4">Navigation</h4>
                                     <div className='d-flex justify-content-around px-5'>
                                         <ul className="nav flex-column opacity-75">
                                             <li className="nav-item text-start mb-2">
@@ -104,7 +104,7 @@ const InfoComponent = () => {
                         {/* Cột thứ ba: Google Map và Social Links */}
                         <div className="col-md-6 col-lg-4 info-col">
                             <div className="map_container flex-column flex">
-                                <h4 className="my-4">Vị trí của chúng tôi</h4>
+                                <h4 className="my-4">Address</h4>
                                 <div className="map">
                                     <GoogleMap />
                                 </div>

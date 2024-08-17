@@ -47,10 +47,6 @@ const CartPage = () => {
                 totalPrice: discountedTotal
             });
 
-            setPopupType('success');
-            setPopupMessage('Đơn hàng của bạn đã được đặt thành công!');
-            setShowPopup(true);
-            // Không chuyển hướng ở đây
         } catch (err) {
             console.error('Error placing order:', err);
             setPopupType('error');

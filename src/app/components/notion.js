@@ -65,10 +65,13 @@ const popupStyles = {
     },
     popup: {
         backgroundColor: '#fff',
+        width: '400px',  // Kích thước cố định chiều rộng
+        maxHeight: '300px',  // Chiều cao tối đa
         padding: '20px',
         borderRadius: '10px',
         boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
         textAlign: 'center',
+        overflowY: 'auto',  // Cho phép cuộn nếu nội dung vượt quá chiều cao tối đa
     },
     logo: {
         fontSize: '40px',
@@ -97,5 +100,6 @@ const popupStyles = {
         cursor: 'pointer',
     },
 };
+
 
 export default NotificationPopup;

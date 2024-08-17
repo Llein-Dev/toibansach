@@ -2,40 +2,73 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import NotificationPopup from '../components/notion';
+
+const API = "http://localhost:3000";
 
 const SignupPage = () => {
-    const [fullName, setFullName] = useState('John Doe'); // Test data
-    const [username, setUsername] = useState('johndoe'); // Test data
-    const [email, setEmail] = useState('john.doe@example.com'); // Test data
-    const [password, setPassword] = useState('password123'); // Test data
-    const [confirmPassword, setConfirmPassword] = useState('password123'); // Test data
+    const [fullName, setFullName] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState(''); // 'success' or 'error'
+    const [popupMessage, setPopupMessage] = useState('');
     const router = useRouter();
 
     const handleSignup = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccess('');
+        setPopupMessage('');
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setPopupType('error');
+            setPopupMessage('Passwords do not match');
+            setShowPopup(true);
+            return;
+        }
+
+        if (!fullName || !username || !email || !password || !confirmPassword) {
+            setPopupType('error');
+            setPopupMessage('All fields are required');
+            setShowPopup(true);
             return;
         }
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+            const response = await axios.post(`${API}/users/register`, {
                 fullname: fullName,
-                username,
-                email,
-                password,
+                username: username,
+                email: email,
+                password: password,
                 role: 'user' // Default role
             });
 
             if (response.status === 201) {
-                router.push('/');
-                alert('Sign Up successful!');
+                setPopupType('success');
+                setPopupMessage('Sign Up successful!');
+                setShowPopup(true);
+                setTimeout(() => router.push('/login'), 2000); // Redirect to login page after 2 seconds
             }
         } catch (err) {
-            setError('Error during signup: ' + err.response?.data?.message || err.message);
+            setPopupType('error');
+            setPopupMessage('Error during signup: ' + (err.response?.data?.message || err.message));
+            setShowPopup(true);
+        }
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
+
+    const handleCloseAndRedirect = () => {
+        handleClosePopup();
+        if (popupType === 'success') {
+            router.push('/login');
         }
     };
 
@@ -56,28 +89,30 @@ const SignupPage = () => {
                                 <p className="lead fw-normal mb-0 me-3">Signup</p>
                             </div>
 
-                            {/* Full Name input */}
-                            <div className="form-outline my-5">
-                                <input
-                                    type="text"
-                                    id="form3Example1"
-                                    className="form-control form-control-lg"
-                                    placeholder="Enter your full name"
-                                    value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                />
-                            </div>
+                            <div className='d-flex my-5 gap-2'>
+                                {/* Full Name input */}
+                                <div className="form-outline w-100">
+                                    <input
+                                        type="text"
+                                        id="form3Example1"
+                                        className="form-control form-control-lg"
+                                        placeholder="Enter your full name"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                    />
+                                </div>
 
-                            {/* Username input */}
-                            <div className="form-outline my-5">
-                                <input
-                                    type="text"
-                                    id="form3Example2"
-                                    className="form-control form-control-lg"
-                                    placeholder="Enter your username"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                />
+                                {/* Username input */}
+                                <div className="form-outline w-100">
+                                    <input
+                                        type="text"
+                                        id="form3Example2"
+                                        className="form-control form-control-lg"
+                                        placeholder="Enter your username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             {/* Email input */}
@@ -118,15 +153,23 @@ const SignupPage = () => {
 
                             <div className="text-center text-lg-start mt-4 pt-2">
                                 <button type="submit" className="btn btn-custom-2" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}>Signup</button>
-                                <p className="small fw-bold mt-2 pt-1 mb-0">
-                                    Already have an account? <a href="/login" className="link-danger">Login</a>
-                                </p>
-                                {error && <div className="alert alert-danger mt-3">{error}</div>}
+                                <button type="button" className="btn btn-light" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}>
+                                    <a className='text-reset' href="/login">Login</a>
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
+            {showPopup && (
+                <NotificationPopup
+                    type={popupType}
+                    message={popupMessage}
+                    onClose={handleClosePopup}
+                    onCloseAndRedirect={popupType === 'success' ? handleCloseAndRedirect : null}
+                />
+            )}
         </section>
     );
 };

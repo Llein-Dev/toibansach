@@ -1,6 +1,10 @@
 "use client"
 import { useState } from 'react';
-const API = process.env.NEXT_PUBLIC_API_URL;
+import axios from 'axios';
+
+// Ensure API URL is correct
+const API = "http://localhost:3000";
+
 const ContactComponent = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -18,17 +22,10 @@ const ContactComponent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const response = await fetch(`${API}/contact`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+            const response = await axios.post(`${API}/contact`, { name: 'Test', email: 'test@example.com', phone: '1234567890', message: 'Test message' });
 
-            if (response.ok) {
+            if (response.status === 200) {
                 alert('Message sent successfully!');
                 setFormData({ name: '', email: '', phone: '', message: '' });
             } else {
@@ -39,6 +36,7 @@ const ContactComponent = () => {
             alert('An error occurred. Please try again.');
         }
     };
+
 
     return (
         <section className="contact_section layout_padding">
@@ -81,7 +79,6 @@ const ContactComponent = () => {
                             </div>
                             <div>
                                 <input
-                                    type="text"
                                     name="message"
                                     className="message-box"
                                     placeholder="Message"
