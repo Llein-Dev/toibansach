@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 // Ensure API URL is correct
-const API = "http://localhost:3000";
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 const ContactComponent = () => {
     const [formData, setFormData] = useState({
