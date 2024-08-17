@@ -1,61 +1,73 @@
-// profile-management.js
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateUser, changePassword } from '../redux/slices/authSlice';
-import { useRouter } from 'next/navigation';
-import '../css/profile-management.css';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API = "http://localhost:3000";
 
 const ProfileManagement = () => {
-    const dispatch = useDispatch();
-    const router = useRouter();
-    const userFromRedux = useSelector((state) => state.auth.user);
-    const [user, setUser] = useState(userFromRedux || {});
     const [activeTab, setActiveTab] = useState('editProfile');
+    const [user, setUser] = useState({});
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
     });
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
-        if (!userFromRedux) {
-            const userPayload = localStorage.getItem('userPayload');
-            setUser(userPayload ? JSON.parse(userPayload) : {});
+        // Fetch user data from localStorage
+        const userPayload = JSON.parse(localStorage.getItem('userPayload'));
+        if (userPayload) {
+            setUser(userPayload);
         }
-    }, [userFromRedux]);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setUser((prevUser) => ({ ...prevUser, [name]: value }));
+        setUser(prevState => ({ ...prevState, [name]: value }));
     };
 
     const handlePasswordChange = (e) => {
         const { name, value } = e.target;
-        setPasswordData((prevData) => ({ ...prevData, [name]: value }));
+        setPasswordData(prevState => ({ ...prevState, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(updateUser(user));
-        localStorage.setItem('userPayload', JSON.stringify(user));
-        router.push('/');
+        // Handle profile update logic here
+        // You need to implement the update logic as per your requirements
     };
 
-    const handlePasswordSubmit = (e) => {
+    const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        if (passwordData.newPassword === passwordData.confirmPassword) {
-            dispatch(changePassword(passwordData));
-            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-            router.push('/');
-        } else {
-            alert('New password and confirm password do not match');
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            setMessage('New passwords do not match.');
+            return;
+        }
+
+        const userPayload = JSON.parse(localStorage.getItem('userPayload'));
+        if (!userPayload || !userPayload.id) {
+            setMessage('User ID is missing.');
+            return;
+        }
+
+        try {
+            const response = await axios.put(`${API}/users/change-password`, {
+                userId: userPayload.id,
+                currentPassword: passwordData.currentPassword,
+                newPassword: passwordData.newPassword
+            });
+            setMessage(response.data.message);
+        } catch (error) {
+            setMessage(error.response?.data?.message || 'Error changing password');
         }
     };
 
     return (
         <div className="container profile-management-container layout_padding">
-            <div className="heading_container heading_center"><h2>User Manager</h2></div>
+            <div className="heading_container heading_center">
+                <h2>User Manager</h2>
+            </div>
             <div className="row">
                 <div className="col-md-3">
                     <ul className="nav nav-pills flex-column">
@@ -81,16 +93,6 @@ const ProfileManagement = () => {
                                         className="form-control"
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <label>Email</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={user.email || ''}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                    />
-                                </div>
                                 {/* Add more fields as needed */}
                                 <button type="submit" className="btn btn-custom">Save Changes</button>
                             </form>
@@ -99,6 +101,7 @@ const ProfileManagement = () => {
                     {activeTab === 'changePassword' && (
                         <div className="password-form">
                             <form onSubmit={handlePasswordSubmit}>
+                                {message && <div className="alert">{message}</div>}
                                 <div className="form-group">
                                     <label>Current Password</label>
                                     <input

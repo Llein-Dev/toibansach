@@ -14,7 +14,7 @@ async function fetchCategories(categoryId) {
 }
 
 async function fetchCategoryProducts(categoryId) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${categoryId}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/category/${categoryId}`);
     if (!res.ok) {
         throw new Error('Failed to fetch products');
     }
