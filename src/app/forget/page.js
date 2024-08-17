@@ -5,6 +5,7 @@ import NotificationPopup from '../components/notion';
 
 
 const API = process.env.NEXT_PUBLIC_API_URL;
+
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [showPopup, setShowPopup] = useState(false);
